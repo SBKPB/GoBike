@@ -80,56 +80,73 @@ struct StationDetailView: View {
                 Button("取消", role: .cancel){}
             }
             
-            HStack {
+           
+                
+                
+            
+            
+            VStack(alignment: .leading, spacing: 0) {
+                
+                HStack {
+                    Text("YouBike2.0系統更新時間: ")
+                    Spacer()
+                    Text("\(station.srcUpdateTime ?? "無")")
+                }
+                .font(.caption)
+                .fontWeight(.medium)
+                .fontDesign(.rounded)
+                .foregroundStyle(.white)
+                .padding(.top, 5)
+                .padding(.bottom, 4)
+               
+                
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(.white)
+                    .frame(height: 1)
+                
                 Text("站點資訊")
                     .font(.title2)
                     .fontWeight(.bold)
+                    .foregroundStyle(.white)
+                    .padding(.vertical)
                 
-                Spacer()
                 
-                Text("YouBike2.0系統更新時間: \(station.srcUpdateTime ?? "無")")
-            }
-            
-            
-            VStack(spacing: 15) {
-                HStack {
-                    Text("站點代號")
-                    Spacer()
-                    Text("\(station.sno ?? "無")")
+                
+                VStack(spacing: 15) {
+                    InfoRow(title: "站點代號", value: "\(station.sno ?? "無")")
+                    
+                    InfoRow(title: "全部停車格", value: "\(station.total ?? 0)")
+                                        
+                    
+                    HStack {
+                        Text("可租車輛")
+                            .fontWeight(.bold)
+                        Spacer()
+                        Text("\(station.availableRentBikes ?? 0)")
+                            .fontWeight(.semibold)
+                            .foregroundStyle(bikeTotalColor)
+                            .padding(.vertical, 5)
+                            .padding(.horizontal, 10)
+                            .background {
+                                RoundedRectangle(cornerRadius: 5)
+                            }
+                    }
+                    
+                    InfoRow(title: "可還車空位", value: "\(station.availableReturnBikes ?? 0)")
+                    
+                    InfoRow(title: "資料更新時間", value: "\(station.infoTime ?? "錯誤")")
+                    
                 }
-                
-                HStack {
-                    Text("全部停車格")
-                    Spacer()
-                    Text("\(station.total ?? 0)")
-                }
-                
-                
-                HStack {
-                    Text("可租車輛")
-                    Spacer()
-                    Text("\(station.availableRentBikes ?? 0)")
-                        .foregroundStyle(bikeTotalColor)
-                }
-                
-                HStack {
-                    Text("可還車空位")
-                    Spacer()
-                    Text("\(station.availableReturnBikes ?? 0)")
-                }
-                
-                HStack {
-                    Text("資料更新時間")
-                    Spacer()
-                    Text("\(station.infoTime ?? "錯誤")")
-                }
-                
-                
-                Spacer()
-                
+                .foregroundStyle(.white)
                 
             }
+            .padding()
+            .background {
+                RoundedRectangle(cornerRadius: 15)
+                    .fill(.orange500)
+            }
             
+            Spacer()
             
         }
         .padding()
@@ -217,4 +234,20 @@ struct StationDetailView: View {
 #Preview {
     StationDetailView(station: Station.testData[0])
 //    StationDetailView(station: .constant(Station.testData[0]))
+}
+
+struct InfoRow: View {
+    let title: String
+    let value: String
+    
+    
+    var body: some View {
+        HStack {
+            Text(title)
+                .fontWeight(.bold)
+            Spacer()
+            Text(value)
+                .fontWeight(.semibold)
+        }
+    }
 }

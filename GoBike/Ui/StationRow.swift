@@ -66,7 +66,7 @@ struct StationRow: View {
             
             Spacer()
             
-            VStack(alignment: .leading) {
+            VStack(alignment: .trailing) {
                 
                 Text("\(timeAgo)")
                     .font(.footnote)
