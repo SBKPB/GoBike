@@ -48,132 +48,135 @@ struct StationDetailView: View {
     
     var body: some View {
         
-        VStack(alignment: .leading) {
-            Text("位置")
-                .font(.title)
-                .fontWeight(.bold)
-            
-            Button(action: {
-                showMapOptions.toggle()
-            }, label: {
-                Map(position: $position, interactionModes: []) {
-                    Annotation("U-Bike", coordinate: region.center) {
-                        Image(systemName: "bicycle.circle.fill")
-                            .resizable()
-                            .frame(width: 50, height: 50)
-                            .foregroundColor(Color.orange500)
-                    }
-                }
-                .frame(height: 300)
-                .cornerRadius(10)
-                .padding(.vertical)
-            })
-            .confirmationDialog("選擇導航地圖", isPresented: $showMapOptions, titleVisibility: .visible) {
-                if (UIApplication.shared.canOpenURL(URL(string:"comgooglemaps://")!)) {
-                    Button("使用 Google Maps") {
-                        openSelectedMapApp(.googleMaps)
-                    }
-                }
-                Button("使用 Apple Maps") {
-                    openSelectedMapApp(.appleMaps)
-                }
-                Button("取消", role: .cancel){}
-            }
-            
-           
-                
-                
-            
-            
-            VStack(alignment: .leading, spacing: 0) {
-                
-                HStack {
-                    Text("YouBike2.0系統更新時間: ")
-                    Spacer()
-                    Text("\(station.srcUpdateTime ?? "無")")
-                }
-                .font(.caption)
-                .fontWeight(.medium)
-                .fontDesign(.rounded)
-                .foregroundStyle(.white)
-                .padding(.top, 5)
-                .padding(.bottom, 4)
-               
-                
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(.white)
-                    .frame(height: 1)
-                
-                Text("站點資訊")
-                    .font(.title2)
+        ScrollView(showsIndicators: false) {
+            VStack(alignment: .leading) {
+                Text("位置")
+                    .font(.title)
                     .fontWeight(.bold)
-                    .foregroundStyle(.white)
+                
+                Button(action: {
+                    showMapOptions.toggle()
+                }, label: {
+                    Map(position: $position, interactionModes: []) {
+                        Annotation("U-Bike", coordinate: region.center) {
+                            Image(systemName: "bicycle.circle.fill")
+                                .resizable()
+                                .frame(width: 50, height: 50)
+                                .foregroundColor(Color.orange500)
+                        }
+                    }
+                    .frame(height: 300)
+                    .cornerRadius(10)
                     .padding(.vertical)
+                })
+                .confirmationDialog("選擇導航地圖", isPresented: $showMapOptions, titleVisibility: .visible) {
+                    if (UIApplication.shared.canOpenURL(URL(string:"comgooglemaps://")!)) {
+                        Button("使用 Google Maps") {
+                            openSelectedMapApp(.googleMaps)
+                        }
+                    }
+                    Button("使用 Apple Maps") {
+                        openSelectedMapApp(.appleMaps)
+                    }
+                    Button("取消", role: .cancel){}
+                }
                 
-                
-                
-                VStack(spacing: 15) {
-                    InfoRow(title: "站點代號", value: "\(station.sno ?? "無")")
+               
                     
-                    InfoRow(title: "全部停車格", value: "\(station.total ?? 0)")
-                                        
+                    
+                
+                
+                VStack(alignment: .leading, spacing: 0) {
                     
                     HStack {
-                        Text("可租車輛")
-                            .fontWeight(.bold)
+                        Text("YouBike2.0系統更新時間: ")
                         Spacer()
-                        Text("\(station.availableRentBikes ?? 0)")
-                            .fontWeight(.semibold)
-                            .foregroundStyle(bikeTotalColor)
-                            .padding(.vertical, 5)
-                            .padding(.horizontal, 10)
-                            .background {
-                                RoundedRectangle(cornerRadius: 5)
-                            }
+                        Text("\(station.srcUpdateTime ?? "無")")
                     }
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .fontDesign(.rounded)
+                    .foregroundStyle(.white)
+                    .padding(.top, 5)
+                    .padding(.bottom, 4)
+                   
                     
-                    InfoRow(title: "可還車空位", value: "\(station.availableReturnBikes ?? 0)")
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(.white)
+                        .frame(height: 1)
                     
-                    InfoRow(title: "資料更新時間", value: "\(station.infoTime ?? "錯誤")")
+                    Text("站點資訊")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.white)
+                        .padding(.vertical)
+                    
+                    
+                    
+                    VStack(spacing: 15) {
+                        InfoRow(title: "站點代號", value: "\(station.sno ?? "無")")
+                        
+                        InfoRow(title: "全部停車格", value: "\(station.total ?? 0)")
+                                            
+                        
+                        HStack {
+                            Text("可租車輛")
+                                .fontWeight(.bold)
+                            Spacer()
+                            Text("\(station.availableRentBikes ?? 0)")
+                                .fontWeight(.semibold)
+                                .foregroundStyle(bikeTotalColor)
+                                .padding(.vertical, 5)
+                                .padding(.horizontal, 10)
+                                .background {
+                                    RoundedRectangle(cornerRadius: 5)
+                                }
+                        }
+                        
+                        InfoRow(title: "可還車空位", value: "\(station.availableReturnBikes ?? 0)")
+                        
+                        InfoRow(title: "資料更新時間", value: "\(station.infoTime ?? "錯誤")")
+                        
+                    }
+                    .foregroundStyle(.white)
                     
                 }
-                .foregroundStyle(.white)
+                .padding()
+                .background {
+                    RoundedRectangle(cornerRadius: 15)
+                        .fill(.orange500)
+                }
+                
+                Spacer()
                 
             }
             .padding()
-            .background {
-                RoundedRectangle(cornerRadius: 15)
-                    .fill(.orange500)
-            }
-            
-            Spacer()
-            
-        }
-        .padding()
-        .navigationTitle("\(station.sna ?? "未知")")
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: { dismiss() }
-                ) {
-                    Image(systemName: "bicycle")
-                        .foregroundStyle(.o)
-                        .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
+            .navigationTitle("\(station.sna ?? "未知")")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: { dismiss() }
+                    ) {
+                        Image(systemName: "bicycle")
+                            .foregroundStyle(.o)
+                            .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
+                    }
                 }
             }
-        }
-        .task {
-            setRegion()
-            locationManager.checkAuthorization()
-            
-            do {
-                userLocation = try await locationManager.currentLocation.coordinate
-            } catch {
-                print("無法獲取用戶位置：\(error.localizedDescription)")
+            .task {
+                setRegion()
+                locationManager.checkAuthorization()
+                
+                do {
+                    userLocation = try await locationManager.currentLocation.coordinate
+                } catch {
+                    print("無法獲取用戶位置：\(error.localizedDescription)")
+                }
+                
             }
-            
         }
+        
         
     }
     
